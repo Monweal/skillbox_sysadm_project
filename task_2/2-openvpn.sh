@@ -8,7 +8,7 @@ print_error()
 
 cd ~/easy-rsa
 # install openvpn
-sudo apt update && sudo apt install openvpn -y
+sudo apt update && yes | sudo apt install ~/openvpn-config_0.1-1_all.deb -y
 # generate request and secret key
 printf "\n" | ./easyrsa gen-req server nopass || print_error "Can't generate request"
 sudo cp -v pki/private/server.key /etc/openvpn/server/ || print_error "Can't copy server private key"
@@ -32,8 +32,7 @@ sudo cp -v /etc/openvpn/server/ca.crt ~/clients/keys/
 sudo chown -R $USER:$(id $USER -gn) ~/clients/keys
 
 # openvpn settings
-sudo cp -v ~/server.conf /etc/openvpn/server/
-cp -v ~/base.conf ~/clients/
+cp -v /etc/openvpn/conf/base.conf ~/clients/
 
 # find out server IP
 if curl --output /dev/null --silent ifconfig.me; then
@@ -43,12 +42,11 @@ else
 fi
 
 sed -i "s/CHANGE_THIS_IP/$MYIP/g" ~/clients/base.conf
-# @TODO install deb-package
 sudo bash -c 'echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf' || print_error "Can't write sysctl config"
 sudo sysctl -p || print_error "Can't load new kernel parameters"
 
 # iptables routes settings
-sudo ~/iptables.sh eth0 udp 1194 || print_error "Can't write iptables rules"
+sudo /etc/openvpn/conf/iptables.sh eth0 udp 1194 || print_error "Can't write iptables rules"
 
 # start openvpn service
 sudo systemctl start openvpn-server@server.service

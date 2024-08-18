@@ -32,13 +32,13 @@ add_new_user()
   cp -v ./pki/issued/$NAME.crt ~/clients/keys/
 
   # make client configure file
-  cd ~ && ./make-config.sh $NAME || print_error "Can't make client configure file"
+  cd ~ && cp -v /etc/openvpn/conf/make-config.sh . && ./make-config.sh $NAME || print_error "Can't make client configure file"
 }
 
 remove_existing_user()
 {
   NAME="$1"
-  rm -f ~/easy-rsa/pki/private/$NAME.key ~/easy-rsa/pki/issued/$NAME.crt ~/clients/keys/$NAME.* ~/clients/files/$NAME.ovpn
+  rm -f ~/easy-rsa/pki/private/$NAME.key ~/easy-rsa/pki/issued/$NAME.crt ~/clients/keys/$NAME.* ~/clients/files/$NAME.ovpn ~/easy-rsa/pki/reqs/$NAME.req
 }
 
 read -p "What do you want? Write command number:
