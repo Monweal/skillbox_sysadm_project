@@ -34,16 +34,15 @@ sudo chown -R $USER:$(id $USER -gn) ~/clients/keys
 # openvpn settings
 sudo cp -v ~/server.conf /etc/openvpn/server/
 cp -v ~/base.conf ~/clients/
-MYIP=$(hostname -I | awk '{print $1}')
+MYIP=$(curl ifconfig.me)
+# TODO if no access to site
 sed -i "s/CHANGE_THIS_IP/$MYIP/g" ~/clients/base.conf
 # @TODO install deb-package
-echo "net.ipv4.ip_forward = 1" >> sudo tee /etc/sysctl.conf
-sudo sysctl -p
+sudo bash -c 'echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf' || print_error "Can't write sysctl config"
+sudo sysctl -p || print_error "Can't load new kernel parameters"
 
 # iptables routes settings
-# @TODO
-read -p "Enter net interface: " NET
-sudo ~/iptables.sh $NET udp 1194
+sudo ~/iptables.sh eth0 udp 1194 || print_error "Can't write iptables rules"
 
 # start openvpn service
 sudo systemctl start openvpn-server@server.service

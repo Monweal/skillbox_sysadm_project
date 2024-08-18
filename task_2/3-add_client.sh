@@ -8,7 +8,9 @@ print_error()
 
 # read -p "Enter client name in one word: " NAME
 NAME="$1"
+# @TODO list, add and remove users
 # @TODO check if client exist
+# @TODO using
 
 # generate client request
 cd ~/easy-rsa
