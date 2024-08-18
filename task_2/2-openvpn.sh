@@ -25,8 +25,8 @@ openvpn --genkey --secret ta.key || print_error "Can't generate tls-crypt key"
 sudo cp -v ta.key /etc/openvpn/server || print_error "Can't copy tls-crypt key"
 
 # make dir for clients
-mkdir -p ~/clients/{keys,files}
-sudo cp -v /etc/openvpn/server/ta.key ~/clients/keys/
+mkdir -p ~/clients/{keys,keys/ta,files}
+sudo cp -v /etc/openvpn/server/ta.key ~/clients/keys/ta/
 chmod -R 700 ~/clients
 sudo cp -v /etc/openvpn/server/ca.crt ~/clients/keys/
 sudo chown -R $USER:$(id $USER -gn) ~/clients/keys
@@ -34,8 +34,14 @@ sudo chown -R $USER:$(id $USER -gn) ~/clients/keys
 # openvpn settings
 sudo cp -v ~/server.conf /etc/openvpn/server/
 cp -v ~/base.conf ~/clients/
-MYIP=$(curl ifconfig.me)
-# TODO if no access to site
+
+# find out server IP
+if curl --output /dev/null --silent ifconfig.me; then
+  MYIP=$(curl ifconfig.me)
+else
+  read -p "Enter IP of this server: " MYIP
+fi
+
 sed -i "s/CHANGE_THIS_IP/$MYIP/g" ~/clients/base.conf
 # @TODO install deb-package
 sudo bash -c 'echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf' || print_error "Can't write sysctl config"
