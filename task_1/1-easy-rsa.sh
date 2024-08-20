@@ -6,7 +6,12 @@ print_error()
   exit 1
 }
 
-read -s -p "Enter your CA password: " CA_PASSWORD
+# @TODO make arguments loop
+NEED_CA_CERT=0
+if [ $# -eq 1 ]; then
+  NEED_CA_CERT=$1
+fi
+
 # install all needed packages
 echo iptables-persistent iptables-persistent/autosave_v4 boolean false | sudo debconf-set-selections
 echo iptables-persistent iptables-persistent/autosave_v6 boolean false | sudo debconf-set-selections
@@ -25,4 +30,7 @@ ln -s /usr/share/easy-rsa/easyrsa .
 cp /etc/easyrsa/vars ~/easy-rsa/
 
 # generate ca.crt
-printf "$CA_PASSWORD\n$CA_PASSWORD\n\n" | ./easyrsa build-ca || print_error "Can't build ca cert"
+if [ $NEED_CA_CERT -eq 1 ]; then
+  read -s -p "Enter your CA password: " CA_PASSWORD
+  printf "$CA_PASSWORD\n$CA_PASSWORD\n\n" | ./easyrsa build-ca || print_error "Can't build ca cert"
+fi

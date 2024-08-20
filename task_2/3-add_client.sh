@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# @TODO client
+
 print_error()
 {
   echo "Error: $1"
@@ -27,6 +29,7 @@ add_new_user()
   printf "\n" | ./easyrsa gen-req $NAME nopass || print_error "Can't create client request" 
   cp -v pki/private/$NAME.key ~/clients/keys/
 
+  # @TODO подписать сертфикат должен центр
   # generate client certificate
   printf "yes\n" | ./easyrsa sign-req client $NAME || print_error "Can't generate client certificate"
   cp -v ./pki/issued/$NAME.crt ~/clients/keys/
