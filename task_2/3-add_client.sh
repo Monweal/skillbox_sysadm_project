@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# @TODO client
-
 print_error()
 {
   echo "Error: $1"
@@ -23,17 +21,20 @@ list_all_users()
 add_new_user()
 {
   NAME="$1"
+  read -p "Enter certification center IP: " CC_IP
+  read -s -p "Enter your CA password: " CA_PASSWORD
 
   # generate client request
   cd ~/easy-rsa &&
   printf "\n" | ./easyrsa gen-req $NAME nopass || print_error "Can't create client request" 
   cp -v pki/private/$NAME.key ~/clients/keys/
 
-  # @TODO подписать сертфикат должен центр
   # generate client certificate
-  printf "yes\n" | ./easyrsa sign-req client $NAME || print_error "Can't generate client certificate"
-  cp -v ./pki/issued/$NAME.crt ~/clients/keys/
+  scp pki/reqs/$NAME.req $CC_IP:~/easy-rsa/pki/reqs/
+  ssh $CC_IP "cd ~/easy-rsa && printf 'yes\n${CA_PASSWORD}\n' | ./easyrsa sign-req client ${NAME}" || print_error "Can't sign client certificate"
+  scp $CC_IP:~/easy-rsa/pki/issued/$NAME.crt ~/clients/keys/
 
+  # @TODO make-config.sh deb package
   # make client configure file
   cd ~ && cp -v /etc/openvpn/conf/make-config.sh . && ./make-config.sh $NAME || print_error "Can't make client configure file"
 }

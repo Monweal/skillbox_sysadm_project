@@ -30,32 +30,6 @@ sudo cp -v pki/ca.crt /etc/openvpn/server || print_error "Can't copy CA-certific
 openvpn --genkey --secret ta.key || print_error "Can't generate tls-crypt key"
 sudo cp -v ta.key /etc/openvpn/server || print_error "Can't copy tls-crypt key"
 
-echo "End!" && exit 0
-
-# @TODO client
-#
-# make dir for clients
-mkdir -p ~/clients/{keys,keys/ta,files}
-sudo cp -v /etc/openvpn/server/ta.key ~/clients/keys/ta/
-chmod -R 700 ~/clients
-sudo cp -v /etc/openvpn/server/ca.crt ~/clients/keys/
-sudo chown -R $USER:$(id $USER -gn) ~/clients/keys
-
-# openvpn settings
-cp -v /etc/openvpn/conf/base.conf ~/clients/
-
-# @TODO server and client take
-# find out server IP
-if curl --output /dev/null --silent ifconfig.me; then
-  MYIP=$(curl ifconfig.me)
-else
-  read -p "Enter IP of this server: " MYIP
-fi
-
-# @TODO client
-sed -i "s/CHANGE_THIS_IP/$MYIP/g" ~/clients/base.conf
-
-# @TODO server
 sudo bash -c 'echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf' || print_error "Can't write sysctl config"
 sudo sysctl -p || print_error "Can't load new kernel parameters"
 
