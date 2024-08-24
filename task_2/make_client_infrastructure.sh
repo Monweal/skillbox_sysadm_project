@@ -1,10 +1,6 @@
 #!/bin/bash
 
-print_error()
-{
-  echo "Error: $1"
-  exit 1
-}
+. ~/functions
 
 read -p "Enter OpenVPN server IP: " OVPN_IP
 
@@ -15,7 +11,6 @@ chmod -R 700 ~/clients
 scp $OVPN_IP:~/easy-rsa/pki/ca.crt ~/clients/keys/ || print_error "Can't remote copy CA certificate"
 sudo chown -R $USER:$(id $USER -gn) ~/clients/keys
 
-# @TODO from cert center
 # openvpn settings
 scp $OVPN_IP:/etc/openvpn/conf/base.conf ~/clients/ || print_error "Can't remote copy client configuration"
 

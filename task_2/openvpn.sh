@@ -1,10 +1,6 @@
 #!/bin/bash
 
-print_error()
-{
-  echo "Error: $1"
-  exit 1
-}
+. ~/functions
 
 read -p "Enter certification center IP: " CC_IP
 
