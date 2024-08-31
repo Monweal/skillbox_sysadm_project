@@ -18,13 +18,13 @@ groups:
           summary: Host disk i-nodes is out
           description: "Disk free i-nodes is less than 10% \n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
       - alert: CpuHighLoad
-        expr: node_load5 >= 4
+        expr: node_load5 >= 2
         for: 0m
         labels:
           severity: critical
         annotations:
           summary: High load average
-          description: "Load average for 5 mins > 4 cpu core \n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+          description: "Load average for 5 mins > 2 cpu core \n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
       - alert: OOM
         expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
         for: 1m
@@ -49,3 +49,19 @@ groups:
         annotations:
           summary: Transmit network speed is too high
           description: "Transmit network speed is higher than 80% limit \n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+      - alert: IOwait long
+        expr: rate(node_cpu_seconds_total{mode="iowait"}[5m]) * 100 > 10
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: IO wait is too long
+          description: "IOwait is more, then 10% of CPU time \n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+      - alert: OpenVPN crushed
+        expr: node_systemd_unit_state{name="openvpn-server@openvpn.service",state="failed"} == 1
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: OpenVPN service crashed
+          description: "OpenVPN service crashed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

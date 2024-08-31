@@ -1,7 +1,11 @@
 #!/bin/bash
 
-sudo apt update && sudo apt install -y prometheus prometheus-node-exporter prometheus-alertmanager
+. ~/functions
+
+sudo apt update && sudo apt install -y prometheus prometheus-node-exporter prometheus-alertmanager || print_error "Can't install prometheus"
+
 # @TODO deb-package
-sudo cp ~/rules.yml /etc/prometheus/
-# добавить rules.yml в конфиг
+sudo cp -v ~/rules.yml /etc/prometheus/
+sudo cp -v ~/prometheus.yml /etc/prometheus
+
 sudo systemctl restart prometheus
