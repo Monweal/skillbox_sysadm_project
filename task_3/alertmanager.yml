@@ -1,0 +1,16 @@
+global:
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 10m
+  repeat_interval: 60m
+  receiver: 'email'
+receivers:
+- name: 'email'
+  email_configs:
+  - to: '<GMAIL>'
+    from: '<GMAIL>'
+    smarthost: 'smtp.gmail.com:587'
+    auth_username: '<GMAIL>'
+    auth_identity: '<GMAIL>'
+    auth_password: '<PASSWORD>'

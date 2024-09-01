@@ -57,3 +57,11 @@ groups:
         annotations:
           summary: IO wait is too long
           description: "IOwait is more, then 10% of CPU time \n VALUE = {{ $value }}\n LABELS = {{ $labels }}"
+      - alert: OpenVPN crushed
+        expr: node_systemd_unit_state{name="openvpn-server@openvpn.service",state="failed"} == 1
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: OpenVPN service crashed
+          description: "OpenVPN service crashed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
