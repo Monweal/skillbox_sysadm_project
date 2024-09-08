@@ -11,8 +11,5 @@ sudo apt update && sudo apt install -y prometheus-node-exporter || print_error "
 # @TODO deb-package
 if [ $OVPN -eq 1 ]; then
   sudo cp -v ~/rules_ovpn.yml /etc/prometheus/
-else
-  sudo cp -v ~/rules.yml /etc/prometheus/
+  sudo systemctl restart prometheus-node-exporter || print_error "Can't restart node exporter"
 fi
-
-sudo systemctl restart prometheus-node-exporter || print_error "Can't restart node exporter"
