@@ -1,15 +1,11 @@
 #!/bin/bash
 
-PACKAGE_NAME="some.deb"
+# install all needed packages
+echo iptables-persistent iptables-persistent/autosave_v4 boolean false | sudo debconf-set-selections
+echo iptables-persistent iptables-persistent/autosave_v6 boolean false | sudo debconf-set-selections
+sudo apt update && yes | sudo apt install ./pki-server_0.1-1_all.deb ./security-settings_0.1-1_all.deb -y || exit 1
 
-if [ -z "$1" ]; then
-  DEB_PACKAGE_PATH=./$PACKAGE_NAME
-else
-  DEB_PACKAGE_PATH="$1"/$PACKAGE_NAME
-fi
-apt install $DEB_PACKAGE_PATH -y
-
-PREFIX="/etc/pki_server"
-$PREFIX/security_settings.sh &&
+PREFIX="/etc/easyrsa"
+/etc/iptables/security_settings.sh &&
 $PREFIX/init-pki.sh &&
 $PREFIX/build_ca.sh

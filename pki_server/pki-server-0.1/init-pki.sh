@@ -1,8 +1,6 @@
 #!/bin/bash
 
-. ~/functions
-
-sudo apt update && sudo apt install easy-rsa -y || print_error "Can't install easy-rsa"
+. /etc/functions
 
 # create PKI dir
 mkdir ~/easy-rsa && cd easy-rsa

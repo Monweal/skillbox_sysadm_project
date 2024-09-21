@@ -9,5 +9,16 @@ services:
     volumes:
       - ./packages:/output
     profiles:
-      - security-settings
+      - security
+      - all
+  pki-server:
+    build:
+      dockerfile: docker/Dockerfile
+      args:
+        FOLDER: "pki_server"
+        PACKAGE_NAME: "pki-server-0.1"
+    volumes:
+      - ./packages:/output
+    profiles:
+      - pki
       - all
