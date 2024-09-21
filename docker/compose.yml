@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  security-settings:
+    build:
+      dockerfile: docker/Dockerfile
+      args:
+        FOLDER: "security"
+        PACKAGE_NAME: "security-settings-0.1"
+    volumes:
+      - ./packages:/output
+    profiles:
+      - security-settings
+      - all
