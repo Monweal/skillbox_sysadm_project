@@ -19,4 +19,5 @@
 ### Список всех профилей
 * all
 * security
+* ovpn
 * pki

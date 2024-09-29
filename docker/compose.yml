@@ -22,3 +22,14 @@ services:
     profiles:
       - pki
       - all
+  openvpn-server:
+    build:
+      dockerfile: docker/Dockerfile
+      args:
+        FOLDER: "ovpn_server"
+        PACKAGE_NAME: "openvpn-config-0.1"
+    volumes:
+      - ./packages:/output
+    profiles:
+      - ovpn
+      - all

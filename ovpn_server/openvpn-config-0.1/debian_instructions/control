@@ -1,4 +1,4 @@
-Source: pki-server
+Source: openvpn-config
 Section: unknown
 Priority: optional
 Maintainer: root <root@unknown>
@@ -8,9 +8,9 @@ Build-Depends:
 Standards-Version: 4.6.2
 Homepage: <insert the upstream URL, if relevant>
 
-Package: pki-server
+Package: openvpn-config
 Architecture: all
 Depends:
- ${misc:Depends}, easy-rsa
+ ${misc:Depends}, openvpn, easy-rsa
 Description: <insert up to 60 chars description>
  <Insert long description, indented with spaces.>

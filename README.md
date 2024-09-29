@@ -32,7 +32,7 @@
 
 Пример команды для scp:
 
-```scp {pki_server/set_pki_server.sh,packages/*.deb} 192.168.1.100:~```
+```scp {pki_server/set_pki_server.sh,packages/{pki-server,security-settings}_0.1-1_all.deb} 192.168.1.100:~```
 
 Далее необходимо запустить скрипт <u>set_pki_server.sh</u>. Скрипт интерактивен, в нем потребуется выбирать настройки сервера.
 
@@ -42,3 +42,22 @@
 Будет создан pki по пути *\~/easy-rsa/pki* и сгенерирован корневой сертификат (*\~/easy-rsa/pki/ca.crt*)
 
 ### 2. OpenVPN сервер
+
+*Для настройки OpenVPN сервера требуется ssh-доступ к серверу удостоверяющего центра PKI (см. пункт 1)*
+Необходимо поместить пакеты <u>openvpn-config_0.1-1_all.deb</u>, <u>pki-server_0.1-1_all.deb</u> и <u>security-settings_0.1-1_all.deb</u>, а так же скрипт <u>set_openvpn_server.sh</u> на целевую машину.
+
+*Пакеты и скрипт должны располагаться в одной директории!*
+
+Пример команды для scp:
+
+```scp {ovpn_server/set_openvpn_server.sh,packages/{openvpn-config,pki-server,security-settings}_0.1-1_all.deb} 192.168.1.100:~```
+
+Далее необходимо запустить скрипт <u>set_openvpn_server.sh</u>. Скрипт интерактивен и требует введения IP-адреса удостоверяющего центра.
+
+```./set_openvpn_server.sh```
+
+#### Необходимые для клиента файлы сервера
+
+1. tls-ключ: ~/easy-rsa/ta.key
+2. CA-сертификат: ~/easy-rsa/pki/ca.crt
+3. Конфигурация OpenVPN-клиента: /etc/openvpn/server/base.conf

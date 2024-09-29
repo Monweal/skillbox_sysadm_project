@@ -1,12 +1,12 @@
 #!/bin/bash
 
-. ~/functions
+. /etc/functions
 
 read -p "Enter certification center IP: " CC_IP
 
-cd ~/easy-rsa
-# install openvpn
-sudo apt update && yes | sudo apt install ~/openvpn-config_0.1-1_all.deb -y
+# init pki
+/etc/easyrsa/init-pki.sh && cd ~/easy-rsa
+
 # generate request and secret key
 printf "\n" | ./easyrsa gen-req server nopass || print_error "Can't generate request"
 sudo cp -v pki/private/server.key /etc/openvpn/server/ || print_error "Can't copy server private key"
@@ -30,7 +30,7 @@ sudo bash -c 'echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf' || print_error
 sudo sysctl -p || print_error "Can't load new kernel parameters"
 
 # iptables routes settings
-sudo /etc/openvpn/conf/iptables.sh eth0 udp 1194 || print_error "Can't write iptables rules"
+sudo /etc/openvpn/scripts/iptables.sh eth0 udp 1194 || print_error "Can't write iptables rules"
 
 # start openvpn service
 sudo systemctl start openvpn-server@server.service

@@ -1,0 +1,2 @@
+*.sh etc/openvpn/scripts
+*.conf etc/openvpn/server
