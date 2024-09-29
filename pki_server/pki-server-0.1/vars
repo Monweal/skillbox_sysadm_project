@@ -1,0 +1,8 @@
+set_var EASYRSA_REQ_COUNTRY 'RUS'
+set_var EASYRSA_REQ_PROVINCE 'Sverdlovsk district'
+set_var EASYRSA_REQ_CITY 'Yekaterinburg'
+set_var EASYRSA_REQ_ORG 'Prosoft Systems'
+set_var EASYRSA_REQ_EMAIL 'elaldermon495@gmail.com'
+set_var EASYRSA_REQ_OU 'LLC'
+set_var EASYRSA_ALGO 'ec'
+set_var EASYRSA_DIGEST 'sha512'

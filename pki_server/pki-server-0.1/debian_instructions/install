@@ -1,0 +1,2 @@
+*.sh etc/easyrsa
+vars etc/easyrsa

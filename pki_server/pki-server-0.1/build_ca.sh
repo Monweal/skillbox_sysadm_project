@@ -1,8 +1,6 @@
 #!/bin/bash
 
-. ~/functions
-
-sudo apt install ~/build-ca_1.0-1_all.deb -y || print_error "Can't install build-ca package"
+. /etc/functions
 
 # copy easy-rsa vars file
 cp /etc/easyrsa/vars ~/easy-rsa/ && cd ~/easy-rsa
